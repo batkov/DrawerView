@@ -13,7 +13,8 @@ class Overlay: UIView {
     private var _mask = CAShapeLayer()
 
     public var cornerRadius: CGFloat = 8
-
+    public var masks = true
+  
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -29,6 +30,11 @@ class Overlay: UIView {
     }
 
     override func layoutSubviews() {
+        guard masks else {
+            self.layer.mask = nil
+            return
+        }
+
         let path = CGMutablePath()
 
         _mask.frame = self.bounds

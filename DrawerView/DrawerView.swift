@@ -54,6 +54,8 @@ fileprivate extension DrawerPosition {
     ]
 }
 
+let kOverlayOverlap: CGFloat = 0
+
 let kVelocityTreshold: CGFloat = 0
 
 // Vertical leeway is used to cover the bottom with springy animations.
@@ -202,6 +204,21 @@ private struct ChildScrollViewInfo {
     public var overlayBackgroundColor: UIColor = kDefaultOverlayBackgroundColor {
         didSet {
             updateVisuals()
+        }
+    }
+  
+    public var overlayOverlap: CGFloat = kOverlayOverlap {
+        didSet {
+            updateVisuals()
+        }
+    }
+  
+  
+    public var overlayMasks = true {
+        didSet {
+            if self.overlay != nil {
+                self.overlay = createOverlay()
+            }
         }
     }
 
@@ -1066,7 +1083,7 @@ private struct ChildScrollViewInfo {
         updateOverlayVisuals(self.overlay)
         updateBackgroundVisuals(self.backgroundView)
         heightConstraint?.constant = -self.topSpace
-        overlayBottomConstraint?.constant = self.cornerRadius
+        overlayBottomConstraint?.constant = self.cornerRadius + self.overlayOverlap
 
         self.setNeedsDisplay()
     }
@@ -1156,6 +1173,7 @@ private struct ChildScrollViewInfo {
         }
 
         let overlay = Overlay(frame: superview.bounds)
+        overlay.masks = overlayMasks
         overlay.isHidden = self.isHidden
         overlay.translatesAutoresizingMaskIntoConstraints = false
         overlay.alpha = 0.0
@@ -1164,14 +1182,15 @@ private struct ChildScrollViewInfo {
 
         superview.insertSubview(overlay, belowSubview: self)
 
+        let additionalHeight = self.cornerRadius + self.overlayOverlap
         let overlayBottomConstraint = overlay.bottomAnchor.constraint(
             equalTo: self.topAnchor,
-            constant: self.cornerRadius)
+            constant: additionalHeight)
 
         NSLayoutConstraint.activate([
             overlay.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
             overlay.trailingAnchor.constraint(equalTo: superview.trailingAnchor),
-            overlay.heightAnchor.constraint(equalTo: superview.heightAnchor),
+            overlay.heightAnchor.constraint(equalTo: superview.heightAnchor, constant: additionalHeight),
             overlayBottomConstraint,
         ])
 
