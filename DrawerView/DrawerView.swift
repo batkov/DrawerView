@@ -212,6 +212,15 @@ private struct ChildScrollViewInfo {
             updateVisuals()
         }
     }
+  
+  
+    public var overlayMasks = true {
+        didSet {
+            if self.overlay != nil {
+                self.overlay = createOverlay()
+            }
+        }
+    }
 
     public var overlayOpacity: CGFloat = kOverlayOpacity {
         didSet {
@@ -1164,6 +1173,7 @@ private struct ChildScrollViewInfo {
         }
 
         let overlay = Overlay(frame: superview.bounds)
+        overlay.masks = overlayMasks
         overlay.isHidden = self.isHidden
         overlay.translatesAutoresizingMaskIntoConstraints = false
         overlay.alpha = 0.0
