@@ -30,7 +30,7 @@ class Overlay: UIView {
     }
 
     override func layoutSubviews() {
-        guard !masks else {
+        guard masks else {
             self.layer.mask = nil
             return
         }

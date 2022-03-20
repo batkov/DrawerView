@@ -1083,7 +1083,7 @@ private struct ChildScrollViewInfo {
         updateOverlayVisuals(self.overlay)
         updateBackgroundVisuals(self.backgroundView)
         heightConstraint?.constant = -self.topSpace
-        overlayBottomConstraint?.constant = self.cornerRadius + overlayOverlap
+        overlayBottomConstraint?.constant = self.cornerRadius + self.overlayOverlap
 
         self.setNeedsDisplay()
     }
@@ -1184,7 +1184,7 @@ private struct ChildScrollViewInfo {
 
         let overlayBottomConstraint = overlay.bottomAnchor.constraint(
             equalTo: self.topAnchor,
-            constant: self.cornerRadius)
+            constant: self.cornerRadius + self.overlayOverlap)
 
         NSLayoutConstraint.activate([
             overlay.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
