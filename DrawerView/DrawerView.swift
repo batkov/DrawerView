@@ -54,6 +54,8 @@ fileprivate extension DrawerPosition {
     ]
 }
 
+let kOverlayOverlap: CGFloat = 0
+
 let kVelocityTreshold: CGFloat = 0
 
 // Vertical leeway is used to cover the bottom with springy animations.
@@ -200,6 +202,12 @@ private struct ChildScrollViewInfo {
     }
 
     public var overlayBackgroundColor: UIColor = kDefaultOverlayBackgroundColor {
+        didSet {
+            updateVisuals()
+        }
+    }
+  
+    public var overlayOverlap: CGFloat = kOverlayOverlap {
         didSet {
             updateVisuals()
         }
@@ -1066,7 +1074,7 @@ private struct ChildScrollViewInfo {
         updateOverlayVisuals(self.overlay)
         updateBackgroundVisuals(self.backgroundView)
         heightConstraint?.constant = -self.topSpace
-        overlayBottomConstraint?.constant = self.cornerRadius
+        overlayBottomConstraint?.constant = self.cornerRadius + overlayOverlap
 
         self.setNeedsDisplay()
     }
