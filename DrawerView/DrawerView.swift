@@ -216,9 +216,11 @@ private struct ChildScrollViewInfo {
   
     public var overlayMasks = true {
         didSet {
-            if self.overlay != nil {
-                self.overlay = createOverlay()
+            guard let overlay = self.overlay else {
+                return
             }
+            overlay.removeFromSuperview()
+            self.overlay = createOverlay()
         }
     }
 
@@ -1190,7 +1192,7 @@ private struct ChildScrollViewInfo {
         NSLayoutConstraint.activate([
             overlay.leadingAnchor.constraint(equalTo: superview.leadingAnchor),
             overlay.trailingAnchor.constraint(equalTo: superview.trailingAnchor),
-            overlay.heightAnchor.constraint(equalTo: superview.heightAnchor, constant: additionalHeight),
+            overlay.heightAnchor.constraint(equalTo: superview.heightAnchor, constant: additionalHeight * 2),
             overlayBottomConstraint,
         ])
 
